@@ -1,0 +1,14 @@
+{:identity/did "did:web:etzhayyim.com:actor:gtin"
+ :identity/also-known-as ["at://gtin.etzhayyim.com"
+                          "https://github.com/etzhayyim/com-etzhayyim-gtin"
+                          "rad:bafkreifyhmyvnzrlayqywqmu437ovg7rfdnm47ebhgmpryyz3aq3qxpmm4"
+                          "did:web:etzhayyim.github.io:com-etzhayyim-gtin"]
+ :identity/services
+ [{:service/id "did:web:etzhayyim.com:actor:gtin#atproto_pds"
+   :service/type "AtprotoPersonalDataServer"
+   :service/endpoint "https://pds.etzhayyim.com"}
+  {:service/id "did:web:etzhayyim.com:actor:gtin#aozora"
+   :service/type "AozoraAppView"
+   :service/endpoint "https://aozora.app"}]
+ :identity/wire-artifact ".well-known/did.json"
+ :identity/wire-format :did-json}

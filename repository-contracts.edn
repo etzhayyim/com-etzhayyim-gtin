@@ -1,0 +1,10 @@
+{:schema-version 1
+ :repository "etzhayyim/com-etzhayyim-gtin"
+ :classification :actor
+ :canonical-actor-metadata "manifest.edn"
+ :canonical-identity-metadata "identity.edn"
+ :canonical-deployment-metadata "kotoba.app.edn"
+ :canonical-data-format :edn
+ :dependencies [{:capability :cap/kqe :kind :host-import}]
+ :external-wire-formats #{:atproto-json :did-json :json-ld}
+ :tests {:command ["bb" "run_tests.clj"]}}
