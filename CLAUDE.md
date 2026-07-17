@@ -145,3 +145,12 @@ barcode extraction は次の順で見る:
 - global coverage target in repo is `1_000_000_000 GTIN barcodes`
 - seed / coverage 上の canonical actor は `did:web:gtin.etzhayyim.com`
 - merchant price comparison を直接ここに入れない
+
+## Standalone repository contract
+
+- `kotoba.app.edn` is the canonical deployment manifest. Component and placement values remain
+  structured EDN; do not encode nested EDN as strings.
+- `schema.edn` and every path referenced by the deployment manifest are owned by this repository.
+- `./run_tests.sh` must pass from a standalone checkout. Do not restore `20-actors` or
+  superproject-relative classpath assumptions.
+
