@@ -9,7 +9,10 @@
 
 (def suites '[gtin.murakumo-test
               gtin.mesh-manifest-test
-              gtin.repository-contract-test])
+              gtin.repository-contract-test
+              gtin.identifier-test
+              gtin.catalog-test
+              gtin.methods-test])
 (apply require suites)
 (let [{:keys [fail error]} (apply t/run-tests suites)]
   (System/exit (if (zero? (+ fail error)) 0 1)))
