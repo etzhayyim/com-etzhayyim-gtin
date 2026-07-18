@@ -176,12 +176,16 @@
                         :gtin.category/status :missing-family-class
                         :gtin.category/sourcing :representative}
                  (get segment-by-id seg) (assoc :gtin.category/segment-name (get-in segment-by-id [seg :name]))))
-        segs (into #{} (keep :gtin.category/parentId) comm)
-        segrows (for [s (sort segs)]
+        reached (into #{} (keep :gtin.category/parentId) comm)
+        ;; ALL registry segments become category rows (name-carrying) so the gtin
+        ;; actor can resolve ANY UNSPSC segment, not only ones products reach.
+        ;; :gtin.category/product-reached? marks segments actually touched by a product.
+        segrows (for [s (sort (keys segment-by-id))]
                   (cond-> {:gtin.category/categoryId s
                            :gtin.category/level :segment
                            :gtin.category/parentId nil
-                           :gtin.category/sourcing :representative}
+                           :gtin.category/sourcing :representative
+                           :gtin.category/product-reached? (contains? reached s)}
                           (get segment-by-id s) (assoc :gtin.category/name (get-in segment-by-id [s :name]))))]
     (concat segrows comm)))
 
