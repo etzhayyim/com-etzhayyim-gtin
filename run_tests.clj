@@ -14,7 +14,8 @@
               gtin.catalog-test
               gtin.methods-test
               gtin.adapters.openfoodfacts-test
-              gtin.e2e-test])
+              gtin.e2e-test
+              gtin.brand-registry-test])
 (apply require suites)
 (let [{:keys [fail error]} (apply t/run-tests suites)]
   (System/exit (if (zero? (+ fail error)) 0 1)))
