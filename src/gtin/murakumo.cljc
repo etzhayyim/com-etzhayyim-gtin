@@ -3,7 +3,7 @@
   (:require [clojure.string :as str]))
 
 (def actor-did
-  "did:web:gtin.etzhayyim.com")
+  "did:web:etzhayyim.com:actor:gtin")
 
 (def common-gates
   [:council-charter-attestation
