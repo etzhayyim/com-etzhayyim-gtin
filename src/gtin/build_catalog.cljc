@@ -23,10 +23,15 @@
      :cljs (aget (.-env js/process) k)))
 
 (def uchiwake-sources
+  "EDN sources of :product/* maps. uchiwake seed+merged (GTIN/BOM) is primary;
+  kakaku kotoba/seed.edn adds JAN retail trade items (broader segment coverage).
+  Env overrides UCHIWAKE_SEED/MERGED; KAKAKU_SEED replaces the kakaku path."
   (->> [(getenv "UCHIWAKE_SEED")
         (getenv "UCHIWAKE_MERGED")
+        (getenv "KAKAKU_SEED")
         "orgs/etzhayyim/com-etzhayyim-uchiwake/data/seed-products.kotoba.edn"
-        "orgs/etzhayyim/com-etzhayyim-uchiwake/data/products.merged.kotoba.edn"]
+        "orgs/etzhayyim/com-etzhayyim-uchiwake/data/products.merged.kotoba.edn"
+        "orgs/etzhayyim/com-etzhayyim-kakaku/kotoba/seed.edn"]
        (filter some?) distinct))
 
 (def unspsc-registry-path
@@ -51,7 +56,11 @@
 (defn- read-uchiwake-products [path]
   (try
     (let [entities (read-edn-file path)]
-      (filter #(and (map? %) (contains? % :product/id)) entities))
+      (->> entities
+           (filter #(and (map? %) (contains? % :product/id)))
+           ;; normalize :product/id separators ('jan_4901...' -> 'jan.4901...')
+           ;; so parse-product-id handles both uchiwake (dot) and kakaku (underscore)
+           (map #(update % :product/id (fn [id] (str/replace (str id) #"_" "."))))))
     (catch :default e
       (println "  skip (absent/unreadable):" path "—" (ex-message e))
       [])))
@@ -109,7 +118,7 @@
                       :gtin.product/sourcing (sourcing-of p)}
                gtin14 (assoc :gtin.product/gtin gtin14)
                bid (assoc :gtin.product/brand bid)
-               (:product/unspsc p) (assoc :gtin.product/category (:product/unspsc p))
+               (or (:product/unspsc p) (:product/category p)) (assoc :gtin.product/category (or (:product/unspsc p) (:product/category p)))
                (:product/gs1-prefix p) (assoc :gtin.product/gs1-prefix (:product/gs1-prefix p))
                (:product/gs1-prefix-country p) (assoc :gtin.product/gs1-prefix-country (:product/gs1-prefix-country p))
                (:product/sector p) (assoc :gtin.product/sector (:product/sector p))
