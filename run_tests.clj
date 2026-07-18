@@ -12,7 +12,8 @@
               gtin.repository-contract-test
               gtin.identifier-test
               gtin.catalog-test
-              gtin.methods-test])
+              gtin.methods-test
+              gtin.adapters.openfoodfacts-test])
 (apply require suites)
 (let [{:keys [fail error]} (apply t/run-tests suites)]
   (System/exit (if (zero? (+ fail error)) 0 1)))
